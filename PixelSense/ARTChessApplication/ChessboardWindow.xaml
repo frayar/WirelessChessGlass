@@ -1,0 +1,641 @@
+﻿<s:SurfaceWindow x:Class="ARTChessApplication.ChessboardWindows"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    Closing="Window_Closing"
+    Title="ARTChessApplication" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" WindowStyle="None" WindowState="Maximized" Topmost="True" xmlns:my="clr-namespace:ARTChessApplication.Cases.Pions" xmlns:my1="clr-namespace:ARTChessApplication.Resources" d:DesignHeight="1135" d:DesignWidth="1970" SizeToContent="WidthAndHeight" ResizeMode="NoResize" DataContext="{Binding}" AllowsTransparency="True">
+    <!--<Grid Visibility="Visible" Height="768" Width="1366">-->
+    <Grid Visibility="Visible" Height="1085" Width="1925">
+        <ProgressBar Margin="12,0,1786,824" Name="SearchProgressBar" Width="128" Height="20" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <ProgressBar.Foreground>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#FF049D4B" Offset="0" />
+                    <GradientStop Color="#FF00A37B" Offset="1" />
+                </LinearGradientBrush>
+            </ProgressBar.Foreground>
+        </ProgressBar>
+        <my1:ExitButton HorizontalAlignment="Left" x:Name="exitButton1" VerticalAlignment="Top" TouchDown="ExitButton_TouchDown" Margin="12,109,0,0" />
+        <my1:NewGameButton HorizontalAlignment="Left" Margin="10,12,0,0" x:Name="newGameButton1" VerticalAlignment="Top" TouchDown="NewGameButton_TouchDown" />
+        <my1:UndoButton HorizontalAlignment="Left" Margin="10,57,0,0" x:Name="undoButton1" VerticalAlignment="Top" TouchDown="UndoButton_TouchDown" />
+        <UniformGrid Rows="8" Columns="8" Margin="420,12,424,12" Name="ChessBoardGrid" HorizontalAlignment="Center" Width="850" Height="850" VerticalAlignment="Center"></UniformGrid>
+        <Label Content="Progress bar" Height="40" HorizontalAlignment="Center" Margin="10,195,1740,850" Name="label1" VerticalAlignment="Center" Width="175" Foreground="#FF1793E2" />
+        <Label Content="Label" Height="68" HorizontalAlignment="Left" Margin="12,167,0,0" Name="EventLabel" VerticalAlignment="Top" Width="175" />
+        <Image Height="200" HorizontalAlignment="Left" Margin="330,0,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="200" Source="/Images/QrCodes/qr_haut_gauche.jpg" />
+        <Image Height="200" HorizontalAlignment="Left" Margin="1392,0,0,0" Name="image2" Stretch="Fill" VerticalAlignment="Top" Width="200" Source="/Images/QrCodes/qr_haut_droite.jpg" />
+        <Image Height="200" HorizontalAlignment="Left" Margin="330,880,0,0" Name="image3" Stretch="Fill" VerticalAlignment="Top" Width="200" Source="/Images/QrCodes/qr_bas_gauche.jpg" />
+        <Image Height="200" HorizontalAlignment="Left" Margin="1392,880,0,0" Name="image4" Stretch="Fill" VerticalAlignment="Top" Width="200" Source="/Images/QrCodes/qr_bas_droite.jpg" />
+        <TextBlock HorizontalAlignment="Left" Margin="12,267,0,0" Name="EventTextBlock" Text="" VerticalAlignment="Top" Width="270" Height="478" FontSize="15" />
+        <Grid Height="842" HorizontalAlignment="Center" Margin="329,40" Name="grid1" VerticalAlignment="Center" Width="842" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+                <RowDefinition Height="75*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+                <ColumnDefinition Width="75*" />
+            </Grid.ColumnDefinitions>
+            
+            <s:TagVisualizer 
+            Name="TagVisualizerA1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded"
+            VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded"
+            VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch" Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH1" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="0"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH2" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="1"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH3" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="2"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH4" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="3"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH5" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="4"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH6" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="5"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            VisualizationRemoved="OnVisualizationRemoved"
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded"
+            Grid.Row="6"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH7" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="6"
+            Grid.Column="7"/>
+
+        <s:TagVisualizer 
+            Name="TagVisualizerA8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="0"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerB8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="1"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerC8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="2"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerD8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="3"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerE8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="4"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerF8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="5"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerG8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="6"/>
+        <s:TagVisualizer 
+            Name="TagVisualizerH8" 
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+             
+            Height="Auto" Width="Auto"
+            VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="OnVisualizationRemoved"
+            Grid.Row="7"
+            Grid.Column="7"/>
+        
+        </Grid>
+        
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF3C5055" Offset="1" />
+                <GradientStop Color="#FF03D8F5" Offset="0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+    </Grid>
+</s:SurfaceWindow>

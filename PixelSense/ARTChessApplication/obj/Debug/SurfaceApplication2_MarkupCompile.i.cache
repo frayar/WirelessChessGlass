@@ -1,0 +1,20 @@
+﻿SurfaceApplication2
+
+
+winexe
+C#
+.cs
+C:\Users\rayar\Documents\Visual Studio 2010\Projects\InteractiveChessboard\SurfaceApplication2\obj\Debug\
+SurfaceApplication2
+none
+false
+DEBUG;TRACE
+C:\Users\rayar\Documents\Visual Studio 2010\Projects\InteractiveChessboard\SurfaceApplication2\App.xaml
+18675037981
+2776703152
+37-439503489
+19529819215
+CameraVisualization.xaml;Cases\Pions\CavB.xaml;Cases\Pions\CavN.xaml;Cases\Pions\DameN.xaml;Cases\Pions\FouN.xaml;Cases\Pions\PionN.xaml;Cases\Pions\RoiN.xaml;Cases\Pions\TourN.xaml;Cases\Pions\DameB.xaml;Cases\Pions\FouB.xaml;Cases\Pions\PionB.xaml;Cases\Pions\RoiB.xaml;Cases\Pions\TourB.xaml;Resources\UndoButton.xaml;Resources\NewGameButton.xaml;Resources\ExitButton.xaml;SurfaceWindow1.xaml;SurfaceWindow2.xaml;
+
+True
+
