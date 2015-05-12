@@ -5,8 +5,11 @@ Ce projet utilise la table Microsoft PixelSense (anciennement Surface) qui repr�
 
 # Hiérarchie du projet
 
-Le dossier [Glasses](Glasses) contient les sources de l'application Unity3D prévue pour les lunettes.
 
-Le dossier [Bluetooth](Bluetooth) contient les sources d'une application Android gérant le Bluetooth, ainsi que les fichiers Ant permettant d'en générer un plugin pour Unity3D.
+Le dossier [BLUETOOTH - ANDROID](BLUETOOTH - ANDROID) contient les sources d'une application Android gérant le Bluetooth, permettant de générer un plugin pour Unity3D.
+
+Le dossier [Bluetooth - C#](Bluetooth - C#) contient un client Bluetooth en C# afin de tester la fonctionalité Bluetooth.
+
+Le dossier [Glasses](Glasses) contient les sources de l'application Unity3D prévue pour les lunettes.
 
 Le dossier [PixelSense](PixelSense) contient les sources de l'application pour la table PixelSense.
