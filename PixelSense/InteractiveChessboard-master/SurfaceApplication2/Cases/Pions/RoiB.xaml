@@ -1,9 +1,0 @@
-﻿<s:TagVisualization x:Class="SurfaceApplication2.Cases.Pions.RoiB"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:s="http://schemas.microsoft.com/surface/2008"
-    Loaded="RoiB_Loaded">
-    <Grid>
-        <Image Height="70" HorizontalAlignment="Left" Margin="10,10,0,0" Name="image1" Source="..\..\Images\Blancs\RoiB.gif" Stretch="Uniform" VerticalAlignment="Top"/>
-    </Grid>
-</s:TagVisualization>
