@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
+  <Tracking>
+    <ImageTarget name="QRCode_4" size="2.000000 1.975104" />
+    <ImageTarget name="QRCode_3" size="2.000000 1.955752" />
+    <ImageTarget name="QRCode_2" size="2.000000 1.975904" />
+    <ImageTarget name="QRCode_1" size="2.000000 2.016667" />
+    <ImageTarget name="bdePolytech" size="512.000000 189.333328" />
+  </Tracking>
+</QCARConfig>
