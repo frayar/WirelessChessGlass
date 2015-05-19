@@ -38,7 +38,7 @@ namespace ARTChessApplication.Models
                     Pieces[i, j].Chosen += new WindowPiece.ChosenHandler(WindowBoard_Chosen);
                     if (board.MovedFromSquare == (line + j) || board.MovedToSquare == (line + j))
                     {
-                        Pieces[i, j].DisplayControl.BorderThickness = new Thickness(3, 3, 3, 3);
+                        Pieces[i, j].DisplayControl.BorderThickness = new Thickness(5, 5, 5, 5);
                         Pieces[i, j].DisplayControl.BorderBrush = new SolidColorBrush(Colors.Yellow);
                         if (board.MovedFromSquare == (line + j))
                         {
@@ -59,10 +59,11 @@ namespace ARTChessApplication.Models
 
         public void WindowBoard_Chosen(int row, int column)
         {
+            
             if (SelectedPiece == null)
             {
                 SelectedPiece = Pieces[row, column];
-                SelectedPiece.DisplayControl.BorderThickness = new Thickness(1, 1, 1, 1);
+                SelectedPiece.DisplayControl.BorderThickness = new Thickness(6, 6, 6, 6);
                 SelectedPiece.DisplayControl.BorderBrush = new SolidColorBrush(Colors.Blue);
 
             }
@@ -72,7 +73,7 @@ namespace ARTChessApplication.Models
                 if ((_moveFromRow == SelectedPiece.Row && _moveFromColumn == SelectedPiece.Column) ||
                     (_moveToRow == SelectedPiece.Row && _moveToColumn == SelectedPiece.Column))
                 {
-                    SelectedPiece.DisplayControl.BorderThickness = new Thickness(3, 3, 3, 3);
+                    SelectedPiece.DisplayControl.BorderThickness = new Thickness(7, 7, 7, 7);
                     SelectedPiece.DisplayControl.BorderBrush = new SolidColorBrush(Colors.Yellow);
                     SelectedPiece = null;
                 }
@@ -91,6 +92,15 @@ namespace ARTChessApplication.Models
             for (i = 0; i < 8; i++)
                 for (j = 0; j < 8; j++)
                     Pieces[i, j].Chosen -= new WindowPiece.ChosenHandler(WindowBoard_Chosen);
+        }
+
+        public void CancelCurrentMove()
+        {
+            if (SelectedPiece != null)
+            {
+                SelectedPiece.DisplayControl.BorderThickness = new Thickness(0);
+                SelectedPiece = null;
+            }
         }
        
     }

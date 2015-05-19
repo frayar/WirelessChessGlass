@@ -23,7 +23,9 @@ namespace ARTChessApplication
         private static Guid UUID = new Guid("{00001101-0000-1000-8000-00805F9B34FB}");
         private static string LOCAL_ADDRESS = "90:A4:DE:A1:82:98";          // PIXELSENSE 
         //private static string DEVICE_ADDESS = "30:76:6F:7E:F5:C6";        //
-        private static string DEVICE_ADDESS = "D8:90:E8:EC:89:47";          // GALAXY S4
+        //private static string DEVICE_ADDESS = "43:29:1A:00:00:00";          // LG P970
+        private static string DEVICE_ADDESS = "88:33:14:40:2E:2A";          // BT-200
+        //private static string DEVICE_ADDESS = "D8:90:E8:EC:89:47";          // GALAXY S4
         private static string PAIRING_PIN = "0000";
 
         private BluetoothEndPoint EP;

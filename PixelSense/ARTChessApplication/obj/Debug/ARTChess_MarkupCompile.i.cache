@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\rayar\Documents\Visual Studio 2010\Projects\InteractiveChessboard\ARTChessApplication\obj\Debug\
+G:\ARTChessApplication\ARTChessApplication\obj\Debug\
 ARTChessApplication
 none
 false
 DEBUG;TRACE
-C:\Users\rayar\Documents\Visual Studio 2010\Projects\InteractiveChessboard\ARTChessApplication\App.xaml
-18-1693029638
+G:\ARTChessApplication\ARTChessApplication\App.xaml
+17404525659
 2776703152
-37482523675
-19529819215
-CameraVisualization.xaml;Cases\Pions\CavB.xaml;Cases\Pions\CavN.xaml;Cases\Pions\DameN.xaml;Cases\Pions\FouN.xaml;Cases\Pions\PionN.xaml;Cases\Pions\RoiN.xaml;Cases\Pions\TourN.xaml;Cases\Pions\DameB.xaml;Cases\Pions\FouB.xaml;Cases\Pions\PionB.xaml;Cases\Pions\RoiB.xaml;Cases\Pions\TourB.xaml;ChessboardWindow.xaml;Resources\UndoButton.xaml;Resources\NewGameButton.xaml;Resources\ExitButton.xaml;SurfaceWindow2.xaml;
+36-838550335
+20-322039921
+CameraVisualization.xaml;Cases\Pions\CavB.xaml;Cases\Pions\CavN.xaml;Cases\Pions\DameN.xaml;Cases\Pions\FouN.xaml;Cases\Pions\PionN.xaml;Cases\Pions\RoiN.xaml;Cases\Pions\TourN.xaml;Cases\Pions\DameB.xaml;Cases\Pions\FouB.xaml;Cases\Pions\PionB.xaml;Cases\Pions\RoiB.xaml;Cases\Pions\TourB.xaml;ChessboardWindow.xaml;Resources\UndoButton.xaml;Resources\NewGameButton.xaml;Resources\ExitButton.xaml;
 
 True
 

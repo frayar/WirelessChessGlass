@@ -137,5 +137,22 @@ namespace ARTChessApplication.Models
 
             return letter;
         }
+
+        public static string translatePieceNameFromFrenchToEnglish(typePiece piece)
+        {
+            if (piece == typePiece.Fou)
+                return "Bishop";
+            else if (piece == typePiece.Roi)
+                return "King";
+            else if (piece == typePiece.Cavalier)
+                return "Knight";
+            else if (piece == typePiece.Pion)
+                return "Pawn";
+            else if (piece == typePiece.Dame)
+                return "Queen";
+            else if (piece == typePiece.Tour)
+                return "Rook";
+            return "Nothing";
+        }
     }
 }

@@ -23,6 +23,8 @@ using InTheHand.Net.Bluetooth;
 using InTheHand.Net.Ports;
 using InTheHand.Net.Sockets;
 
+using System.Speech.Synthesis;
+
 
 namespace ARTChessApplication
 {
@@ -50,6 +52,7 @@ namespace ARTChessApplication
         private bool _isCpuGame;
         private bool isMoving;
         private BluetoothManager _bluetoothManager;
+        private bool _areDevicesPaired;
         private LogHandler _log;                            //Log contenant la majorité des événements. Met le jour le TextBlock à gauche de l'application
         private int _nbPiece = 0;
         private typePiece[] _typePieceSet = new typePiece[] {typePiece.Pion, typePiece.Pion, typePiece.Pion, typePiece.Pion, 
@@ -59,6 +62,9 @@ namespace ARTChessApplication
 
         private enum AppMode { INITIALIZING,PLAYING  };
         private AppMode _mode = AppMode.INITIALIZING;
+
+        private SpeechSynthesizer _speechSynthesizer;
+        
 
         #endregion
 
@@ -81,6 +87,13 @@ namespace ARTChessApplication
 
             // Initialize tags
             InitializeTagDefinitions();
+
+            // Initialize bluetooth
+            _bluetoothManager = new BluetoothManager();
+            _bluetoothManager.Connect();
+
+            // Initialize the speech synthesizer
+            _speechSynthesizer = new SpeechSynthesizer();
         }
 
         #endregion
@@ -191,9 +204,29 @@ namespace ARTChessApplication
             _windowBoard = new WindowBoard();
             _log = new LogHandler();
 
+            
             // Notify user
+            string deviceName = _bluetoothManager.GetDeviceName();
+            if (deviceName.Equals("NULL"))
+            {
+                string log = "THE DEVICES ARE NOT CONNECTED";
+                _log.AddString(log);
+                _speechSynthesizer.Speak(log);
+                _areDevicesPaired = false;
+            } else {
+                _log.AddString("CONNECTED TO " + _bluetoothManager.GetDeviceName());
+                _speechSynthesizer.Speak("Devices connected");
+                _areDevicesPaired = true;
+            }
+         
+            _log.AddString("\n");
             _log.AddString("PLEASE PUT THE WHITE CHESSPIECE ON THE BOARD, ONE BY ONE.");
+            _speechSynthesizer.SpeakAsync("Initialization phase");
             EventTextBlock.Text = _log.getFullLog();
+
+            //Send reset request via bluetooth. 
+            if (_areDevicesPaired) 
+                _bluetoothManager.Send("RESET");
 
             UpdateWindow();
         }
@@ -245,10 +278,21 @@ namespace ARTChessApplication
             TagVisualizer tag = (TagVisualizer)sender;
             string name = tag.Name;
 
+            Point visualizationCenter = e.TagVisualization.Center;
+
+            double tagHeight = tag.ActualHeight;
+            double tagWidth = tag.ActualWidth;
+            double X = visualizationCenter.X;
+            double Y = visualizationCenter.Y;
+
+            int column = getCurrentAxisRowPosition(tagWidth, X);
+            int row = getCurrentAxisRowPosition(tagHeight, Y);
+
             switch(this._mode)
             {
                 case AppMode.INITIALIZING:
                     testValuePiece( tag, this._typePieceSet[camera.VisualizedTag.Value] );
+                    
                     if (this._nbPiece == 16)
                     {
                         // Game can start : initialize rest of the attributes
@@ -259,20 +303,15 @@ namespace ARTChessApplication
                         _isCpuGame = true;
                         isMoving = false;
 
-                        // Initialize bluetooth
-                        _bluetoothManager = new BluetoothManager();
-                        _bluetoothManager.Connect();
-                        _log.AddString("Connected to " + _bluetoothManager.GetDeviceName());
-
                         this._mode = AppMode.PLAYING;
+                        _log.AddString("GAME START : Your move!]");
+                        _speechSynthesizer.Speak("Game Start. Make your move buddy.");
                     }
 
                     break;
                 case AppMode.PLAYING:
                     if (isMoving)
                     {
-                        int column = Grid.GetColumn(tag);
-                        int row = Grid.GetRow(tag);
                         _windowBoard.WindowBoard_Chosen(row, column);
                         isMoving = false;
                     }
@@ -283,7 +322,16 @@ namespace ARTChessApplication
             EventTextBlock.Text = _log.getFullLog();
         }
 
-
+        /// <summary>
+        /// Méthode pour obtenir la case correspondant à la position de l'objet sur l'axe
+        /// </summary>
+        /// <param name="tagVisualizerAxisPosition">Position du tag visualizer sur l'axe, égale à 840 en l'état</param>
+        /// <param name="visualizationAxisPosition">Position de l'objet posé sur l'axe</param>
+        /// <returns></returns>
+        int getCurrentAxisRowPosition(double tagVisualizerAxisPosition, double visualizationAxisPosition) {
+            int TagVisuliazerRow = (int)tagVisualizerAxisPosition / 8;
+            return (int)visualizationAxisPosition / TagVisuliazerRow;
+        }
 
         /// <summary>
         /// 
@@ -292,9 +340,21 @@ namespace ARTChessApplication
         /// <param name="e"></param>
         private void OnVisualizationRemoved(object sender, TagVisualizerEventArgs e)
         {
+
             TagVisualizer tag = (TagVisualizer)sender;
-            int column = Grid.GetColumn(tag);
-            int row = Grid.GetRow(tag);
+            Point visualizationCenter = e.TagVisualization.Center;
+            //Point visualizationCenter =
+             //       tag.TouchesCaptured.ElementAt(this._nbPiece).GetCenterPosition(tag);
+            double tagHeight = tag.ActualHeight;
+            double tagWidth = tag.ActualWidth;
+            double X = visualizationCenter.X;
+            double Y = visualizationCenter.Y;
+
+            int column = getCurrentAxisRowPosition(tagWidth, X);
+            int row = getCurrentAxisRowPosition(tagHeight, Y);
+            //int column = Grid.GetColumn(tag);
+            //int row = Grid.GetRow(tag);
+
             WindowPiece[,] pieces = _windowBoard.Pieces;
             WindowPiece piece = pieces[row, column];
             Piece[] p = _chessBoard.Pieces;
@@ -333,8 +393,18 @@ namespace ARTChessApplication
         /// <returns></returns>
         private bool testValuePiece(TagVisualizer tag, typePiece typePiece)
         {
-            int column = Grid.GetColumn(tag);
-            int row = Grid.GetRow(tag);
+            Point visualizationCenter =
+                    tag.TouchesCaptured.ElementAt(tag.TouchesCaptured.Count()-1).GetCenterPosition(tag);
+            
+            double tagHeight = tag.ActualHeight;
+            double tagWidth = tag.ActualWidth;
+            double X = visualizationCenter.X;
+            double Y = visualizationCenter.Y;
+
+            int column = getCurrentAxisRowPosition(tagWidth, X);
+            int row = getCurrentAxisRowPosition(tagHeight, Y);
+            //int column = Grid.GetColumn(tag);
+            //int row = Grid.GetRow(tag);
             /*
             WindowPiece[,] pieces = _windowBoard.Pieces;
 
@@ -348,17 +418,22 @@ namespace ARTChessApplication
             {
                 this._nbPiece++;
                 byte position = (byte)(row * 16 + column);
-                _log.AddString(piece.type + "_" + getMoveFromByte(position) + " déposée. [" + this._nbPiece + "]");
+                _log.AddString( piece.type + "_" + getMoveFromByte(position) + " déposée. [" + this._nbPiece + "]");
+                string pieceEnglishName = Piece.translatePieceNameFromFrenchToEnglish(piece.type);
+                _speechSynthesizer.SpeakAsync(pieceEnglishName + " " + getMoveFromByte(position) + "placed");
                 
             }
             else
             {
                 _log.AddString(piece.type + "_Mauvaise position.");
+                _speechSynthesizer.SpeakAsync("Wrong position");
 
             }
             EventTextBlock.Text = _log.getFullLog();
             return false;
         }
+
+
 
         #endregion
 
@@ -388,8 +463,8 @@ namespace ARTChessApplication
                 // The maximum number for this tag value.
                 tagDef.MaxCount = 1;
 
-                // The visualization stays for 1 seconds.
-                //tagDef.LostTagTimeout = 2000.0;
+                // The visualization stays for 2 seconds.
+                tagDef.LostTagTimeout = 2000.0;
 
                 // Orientation offset (default).
                 //tagDef.OrientationOffsetFromTag = 0.0;
@@ -405,77 +480,7 @@ namespace ARTChessApplication
                 tagDef.UsesTagOrientation = false;
 
                 // Add the definition to the collection.
-                TagVisualizerA1.Definitions.Add(tagDef);
-                TagVisualizerA2.Definitions.Add(tagDef);
-                TagVisualizerA3.Definitions.Add(tagDef);
-                TagVisualizerA4.Definitions.Add(tagDef);
-                TagVisualizerA5.Definitions.Add(tagDef);
-                TagVisualizerA6.Definitions.Add(tagDef);
-                TagVisualizerA7.Definitions.Add(tagDef);
-                TagVisualizerA8.Definitions.Add(tagDef);
-
-                TagVisualizerB1.Definitions.Add(tagDef);
-                TagVisualizerB2.Definitions.Add(tagDef);
-                TagVisualizerB3.Definitions.Add(tagDef);
-                TagVisualizerB4.Definitions.Add(tagDef);
-                TagVisualizerB5.Definitions.Add(tagDef);
-                TagVisualizerB6.Definitions.Add(tagDef);
-                TagVisualizerB7.Definitions.Add(tagDef);
-                TagVisualizerB8.Definitions.Add(tagDef);
-
-                TagVisualizerC1.Definitions.Add(tagDef);
-                TagVisualizerC2.Definitions.Add(tagDef);
-                TagVisualizerC3.Definitions.Add(tagDef);
-                TagVisualizerC4.Definitions.Add(tagDef);
-                TagVisualizerC5.Definitions.Add(tagDef);
-                TagVisualizerC6.Definitions.Add(tagDef);
-                TagVisualizerC7.Definitions.Add(tagDef);
-                TagVisualizerC8.Definitions.Add(tagDef);
-
-                TagVisualizerD1.Definitions.Add(tagDef);
-                TagVisualizerD2.Definitions.Add(tagDef);
-                TagVisualizerD3.Definitions.Add(tagDef);
-                TagVisualizerD4.Definitions.Add(tagDef);
-                TagVisualizerD5.Definitions.Add(tagDef);
-                TagVisualizerD6.Definitions.Add(tagDef);
-                TagVisualizerD7.Definitions.Add(tagDef);
-                TagVisualizerD8.Definitions.Add(tagDef);
-
-                TagVisualizerE1.Definitions.Add(tagDef);
-                TagVisualizerE2.Definitions.Add(tagDef);
-                TagVisualizerE3.Definitions.Add(tagDef);
-                TagVisualizerE4.Definitions.Add(tagDef);
-                TagVisualizerE5.Definitions.Add(tagDef);
-                TagVisualizerE6.Definitions.Add(tagDef);
-                TagVisualizerE7.Definitions.Add(tagDef);
-                TagVisualizerE8.Definitions.Add(tagDef);
-
-                TagVisualizerF1.Definitions.Add(tagDef);
-                TagVisualizerF2.Definitions.Add(tagDef);
-                TagVisualizerF3.Definitions.Add(tagDef);
-                TagVisualizerF4.Definitions.Add(tagDef);
-                TagVisualizerF5.Definitions.Add(tagDef);
-                TagVisualizerF6.Definitions.Add(tagDef);
-                TagVisualizerF7.Definitions.Add(tagDef);
-                TagVisualizerF8.Definitions.Add(tagDef);
-
-                TagVisualizerG1.Definitions.Add(tagDef);
-                TagVisualizerG2.Definitions.Add(tagDef);
-                TagVisualizerG3.Definitions.Add(tagDef);
-                TagVisualizerG4.Definitions.Add(tagDef);
-                TagVisualizerG5.Definitions.Add(tagDef);
-                TagVisualizerG6.Definitions.Add(tagDef);
-                TagVisualizerG7.Definitions.Add(tagDef);
-                TagVisualizerG8.Definitions.Add(tagDef);
-
-                TagVisualizerH1.Definitions.Add(tagDef);
-                TagVisualizerH2.Definitions.Add(tagDef);
-                TagVisualizerH3.Definitions.Add(tagDef);
-                TagVisualizerH4.Definitions.Add(tagDef);
-                TagVisualizerH5.Definitions.Add(tagDef);
-                TagVisualizerH6.Definitions.Add(tagDef);
-                TagVisualizerH7.Definitions.Add(tagDef);
-                TagVisualizerH8.Definitions.Add(tagDef);
+                TagVisualizer.Definitions.Add(tagDef);
             }
         }
 
@@ -542,8 +547,14 @@ namespace ARTChessApplication
 
             _chessBoard.MovedFromSquare = fromSquare;
             _chessBoard.MovedToSquare = toSquare;
-            _log.AddString("[Blanc] " + _chessBoard.Pieces[toSquare].type + "_" + getMoveStr(_chessBoard.MovedFromSquare, _chessBoard.MovedToSquare));
+            _log.AddString("[Blanc] " + _chessBoard.Pieces[_chessBoard.MovedFromSquare].type + "_" + getMoveStr(_chessBoard.MovedFromSquare, _chessBoard.MovedToSquare));
+            string pieceEnglishName = Piece.translatePieceNameFromFrenchToEnglish(_chessBoard.Pieces[_chessBoard.MovedFromSquare].type);
+            _speechSynthesizer.Speak(pieceEnglishName +" "+ getMoveFromByte(_chessBoard.MovedToSquare));
             EventTextBlock.Text = _log.getFullLog();
+
+            // Send kill request via bluetooth. 
+            if (_areDevicesPaired) 
+                _bluetoothManager.Send("KILL_" + getMoveFromByte(_chessBoard.MovedToSquare));
 
             if (CancelMove(fromSquare) == true)
                 return false;
@@ -610,9 +621,10 @@ namespace ARTChessApplication
 
                 // Get CPU move as a string
                 string move = getMoveStr(_chessBoard.CpuMovedFromSquare, _chessBoard.CpuMovedToSquare);
-
+                
                 // Send it via bluetooth
-                _bluetoothManager.Send(move);
+                if (_areDevicesPaired) 
+                    _bluetoothManager.Send(move);
 
                 // Update Log UI
                 EventLabel.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
@@ -620,6 +632,8 @@ namespace ARTChessApplication
                     delegate()
                     {
                         _log.AddString("[Noir] " + _chessBoard.Pieces[_chessBoard.CpuMovedToSquare].type + "_" + move);
+                        string pieceEnglishName = Piece.translatePieceNameFromFrenchToEnglish(_chessBoard.Pieces[_chessBoard.CpuMovedToSquare].type);
+                        _speechSynthesizer.SpeakAsync(pieceEnglishName + " " + getMoveFromByte(_chessBoard.CpuMovedToSquare));
                         EventTextBlock.Text = _log.getFullLog();
                     }
                  ));
@@ -714,7 +728,7 @@ namespace ARTChessApplication
                 {7, "H"}
             };
             string str = "";
-            int row = 8 - (move / 16);
+            int row = 8 - move / 16;
             int column = move % 16;
 
             columnsDictionary.TryGetValue(column, out str);
@@ -723,6 +737,18 @@ namespace ARTChessApplication
         }
 
         #endregion
+
+        private void UndoChosenMoveButton_TouchDown(object sender, RoutedEventArgs e)
+        {
+            if (this._mode.Equals(AppMode.PLAYING))
+            {
+                if (isMoving)
+                {
+                    _windowBoard.CancelCurrentMove();
+                    isMoving = false;
+                }
+            }
+        }
 
     } // End (class)
 } // End (namespace)

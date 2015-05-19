@@ -70,6 +70,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SQL Server Compact Edition\v3.5\Desktop\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Speech" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -98,9 +99,6 @@
     </Compile>
     <Compile Include="LogHandler.cs" />
     <Compile Include="BluetoothManager.cs" />
-    <Compile Include="SurfaceWindow2.xaml.cs">
-      <DependentUpon>SurfaceWindow2.xaml</DependentUpon>
-    </Compile>
     <Page Include="CameraVisualization.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -230,10 +228,6 @@
     <Compile Include="Resources\ExitButton.xaml.cs">
       <DependentUpon>ExitButton.xaml</DependentUpon>
     </Compile>
-    <Page Include="SurfaceWindow2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
